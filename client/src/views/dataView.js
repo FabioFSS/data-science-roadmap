@@ -28,7 +28,8 @@ function buildMarkdownExport() {
       topic.subtopics.forEach((s, si) => {
         const key = `${q.id}-${ti}-${si}`;
         const entry = state.subtopics[key] || {};
-        md += `- [${entry.done ? "x" : " "}] ${s}\n`;
+        md += `- [${entry.done ? "x" : " "}] ${s.title}\n`;
+        if (s.links && s.links.length) s.links.forEach((l) => (md += `  - [${l.name}](${l.url})\n`));
         if (entry.notes && entry.notes.trim()) md += `  - Nota: ${entry.notes.trim()}\n`;
       });
       const tnote = state.topicNotes[`${q.id}-${ti}`];
@@ -61,7 +62,7 @@ function exportPDF() {
       topic.subtopics.forEach((s, si) => {
         const key = `${q.id}-${ti}-${si}`;
         const entry = state.subtopics[key] || {};
-        html += `<div class="pitem ${entry.done ? "pdone" : "ppending"}">${s}</div>`;
+        html += `<div class="pitem ${entry.done ? "pdone" : "ppending"}">${s.title}</div>`;
         if (entry.notes && entry.notes.trim())
           html += `<div style="font-size:11.5px;color:#555;margin:2px 0 6px 18px;">Nota: ${entry.notes.trim()}</div>`;
       });

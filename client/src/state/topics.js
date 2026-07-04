@@ -6,7 +6,7 @@ export function allTopicsFor(q) {
   const state = getState();
   const custom = (state.customTopics[q.id] || []).map((c, i) => ({
     title: c.title,
-    subtopics: ["Conteúdo definido por você — use a anotação para detalhar"],
+    subtopics: [{ title: "Conteúdo definido por você — use a anotação para detalhar", links: [] }],
     custom: true,
     customIndex: i,
   }));

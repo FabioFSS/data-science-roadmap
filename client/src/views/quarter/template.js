@@ -15,11 +15,21 @@ function buildTopicsHtml(q, topics, state) {
           const skey = `${q.id}-${ti}-${si}`;
           const entry = state.subtopics[skey] || { done: false, notes: "" };
           const hasNote = entry.notes && entry.notes.trim().length > 0;
+          const links = s.links || [];
+          const linksHtml = links.length
+            ? `<div class="sub-links">${links
+                .map(
+                  (l) =>
+                    `<a href="${l.url}" target="_blank" rel="noopener noreferrer">${l.name}</a><span class="res-tag ${l.type}">${l.type === "free" ? "gratuito" : l.type === "paid" ? "pago" : "gratuito/pago"}</span>`
+                )
+                .join("")}</div>`
+            : "";
           return `
         <div class="subtopic ${entry.done ? "done" : ""}" data-key="${skey}">
           <div class="sub-check" data-action="toggle"></div>
           <div class="sub-body">
-            <div class="sub-title">${s}</div>
+            <div class="sub-title">${s.title}</div>
+            ${linksHtml}
             <div class="note-toggle ${hasNote ? "has-note" : ""}" data-action="note-toggle">✎ ${hasNote ? "ver anotação" : "adicionar anotação"}</div>
             <textarea class="note-box" placeholder="Sua anotação sobre este subtópico...">${entry.notes || ""}</textarea>
           </div>

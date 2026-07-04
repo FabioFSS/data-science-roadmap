@@ -85,6 +85,9 @@ input[type="date"]{ background:var(--surface-2); border:1px solid var(--border);
 .sub-body{ flex:1; min-width:0; }
 .sub-title{ font-size:13.5px; line-height:1.5; color:var(--text); }
 .subtopic.done .sub-title{ color:var(--text-muted); text-decoration:line-through; text-decoration-color:var(--text-faint); }
+.sub-links{ display:flex; flex-wrap:wrap; align-items:center; gap:6px; margin-top:5px; }
+.sub-links a{ font-size:11.5px; color:var(--text-muted); text-decoration:none; }
+.sub-links a:hover{ color:var(--blue); text-decoration:underline; }
 .note-toggle{ font-family:var(--font-display); font-size:10.5px; color:var(--text-faint); cursor:pointer; margin-top:5px; display:inline-flex; align-items:center; gap:4px; user-select:none; }
 .note-toggle:hover{ color:var(--blue); }
 .note-toggle.has-note{ color:var(--amber); }
