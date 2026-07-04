@@ -1,184 +1,195 @@
-# Roadmap Tracker — IA/LLMs para Cientista de Dados Sênior
+# Roadmap Tracker — AI/LLMs for Senior Data Scientists
 
-[English version](README.en.md)
+[Versão em português](README.pt.md)
 
-Aplicação self-hosted para acompanhar o roadmap de estudos: progresso por
-tópico/subtópico, prazos, tempo de estudo, certificações, flashcards com
-repetição espaçada, cursos pessoais, estatísticas e backup.
+Self-hosted application to track a study roadmap: progress by topic/subtopic,
+deadlines, study time, certifications, flashcards with spaced repetition,
+personal courses, statistics, and backup.
 
-## Arquitetura
+## Architecture
 
 ```
 roadmap-tracker/
 ├── client/
 │   └── src/
-│       ├── data/                → catálogo estático (roadmap, glossário, etc.)
-│       ├── state/               → lógica de domínio (persistência, tópicos, timer,
-│       │                          estatísticas, flashcards, cursos)
+│       ├── data/                -> static catalog (roadmap, glossary, etc.)
+│       ├── state/               -> domain logic (persistence, topics, timer,
+│       │                          statistics, flashcards, courses)
 │       ├── views/
-│       │   ├── quarter/         → template + interações da tela principal
-│       │   └── flashcards/      → gerenciamento de cartões
-│       ├── state.js             → fachada de compatibilidade (re-export)
+│       │   ├── quarter/         -> main screen template + interactions
+│       │   └── flashcards/      -> flashcard management
+│       ├── state.js             -> compatibility facade (re-export)
 │       └── ...
 ├── server/
 │   └── src/
-│       ├── app.js               → composição da aplicação Express
-│       ├── config/              → configuração de ambiente
-│       ├── modules/state/       → rotas do módulo de estado
-│       ├── repositories/        → acesso ao arquivo JSON de persistência
-│       └── index.js             → bootstrap HTTP
+│       ├── app.js               -> Express application composition
+│       ├── config/              -> environment configuration
+│       ├── modules/state/       -> state module routes
+│       ├── repositories/        -> JSON file persistence access
+│       └── index.js             -> HTTP bootstrap
 ├── Dockerfile
 └── docker-compose.yml
 ```
 
-- **Frontend**: JavaScript puro em módulos ES (`client/src/`), sem React/Vue,
-  com responsabilidades separadas em camadas: catálogo (`data/`), regras de
-  negócio (`state/`) e renderização/interações (`views/`). O arquivo
-  `state.js` foi mantido como fachada para preservar compatibilidade de imports.
-- **Backend**: Express organizado em camadas simples: bootstrap (`index.js`),
-  composição (`app.js`), configuração (`config/`), módulo de API
-  (`modules/state/`) e persistência (`repositories/`). A API continua com as
-  mesmas rotas (`GET /api/state`, `PUT /api/state`) e persiste em `data/state.json`.
-- **Sem autenticação**: como você vai acessar apenas pela rede local, não há
-  login nem token. Não exponha essa porta diretamente para a internet sem
-  adicionar alguma proteção antes (ver seção "Segurança" abaixo).
+- Frontend: plain JavaScript ES modules in `client/src/`, without React/Vue,
+  with responsibilities separated into layers: catalog (`data/`), domain logic
+  (`state/`), and rendering/interactions (`views/`). The `state.js` file was
+  kept as a facade to preserve import compatibility.
+- Backend: Express organized into simple layers: bootstrap (`index.js`),
+  composition (`app.js`), configuration (`config/`), API module
+  (`modules/state/`), and persistence (`repositories/`). The API keeps the same
+  routes (`GET /api/state`, `PUT /api/state`) and persists data in
+  `data/state.json`.
+- No authentication: as designed, this app assumes only devices in your local
+  network will access it. Do not expose this port directly to the public
+  internet without adding protection first (see the Security section below).
 
-## Rodando com Podman (Bazzite)
+## Running with Podman (Bazzite)
 
 ```bash
 cd roadmap-tracker
 podman-compose up -d --build
 ```
 
-Isso builda a imagem (compila o cliente com Vite e empacota com o servidor)
-e sobe o container em segundo plano, escutando na porta `8080`.
+This builds the image (compiles the client with Vite and packages it together
+with the server) and starts the container in the background, listening on port
+`8080` inside the container.
 
-Para ver os logs:
+To view logs:
+
 ```bash
 podman-compose logs -f
 ```
 
-Para parar:
+To stop it:
+
 ```bash
 podman-compose down
 ```
 
-Se preferir Docker puro, os comandos são idênticos trocando `podman-compose`
-por `docker compose`.
+If you prefer plain Docker, the commands are the same, replacing
+`podman-compose` with `docker compose`.
 
-## Acessando de outros dispositivos na rede local
+## Accessing from other devices on your local network
 
-1. Descubra o IP da máquina que está rodando o container:
+1. Find the IP address of the machine running the container:
+
    ```bash
    ip addr show | grep "inet "
    ```
-2. Em qualquer dispositivo na mesma rede (celular, notebook, etc.), acesse:
+
+2. On any device on the same network (phone, laptop, etc.), open:
+
    ```
-   http://<IP-DA-MAQUINA>:8080
+   http://<MACHINE-IP>:8080
    ```
 
-Todos os dispositivos vão ler e escrever o mesmo arquivo de estado no
-servidor — ou seja, o progresso fica sincronizado entre eles automaticamente
-(sem precisar exportar/importar backup entre aparelhos).
+All devices will read and write the same state file on the server, so progress
+stays synchronized automatically across devices without needing to
+export/import backups between them.
 
-## Solução de problemas comuns
+## Common troubleshooting
 
-**"bind: address already in use"** — outra coisa já está usando a porta.
-Troque a porta da esquerda em `docker-compose.yml` (ex: `"8090:8080"`) e rode
-`podman-compose up -d --build` de novo.
+Address already in use: something else is already using that port. Change the
+left-hand port in `docker-compose.yml` (for example, `"8090:8080"`) and run
+`podman-compose up -d --build` again.
 
-**"Não foi possível salvar — verifique a conexão com o servidor"** (aparece
-na barra lateral, mas a página carrega normalmente) — isso indica que o
-container não conseguiu *escrever* no arquivo `data/state.json`, geralmente
-por causa do SELinux no Fedora/Bazzite bloqueando escrita em pastas montadas
-do host. A correção é o sufixo `:Z` no volume (já incluso no
-`docker-compose.yml` deste projeto). Se mesmo assim persistir:
+Could not save, check the connection to the server: if this appears in the
+sidebar while the page still loads normally, the container likely could not
+write to `data/state.json`, usually because SELinux on Fedora/Bazzite blocked
+writes to a mounted host folder. The `:Z` volume suffix in `docker-compose.yml`
+already handles this in this project. If the issue persists:
+
 ```bash
 podman-compose down
-rm -rf data          # remove qualquer estado com permissão inconsistente
+rm -rf data
 podman-compose up -d --build
-podman-compose logs -f   # confira se aparece algum erro de permissão
+podman-compose logs -f
 ```
 
-**Quero confirmar que o backend está respondendo** — direto na máquina que
-roda o container:
+Checking whether the backend is responding: on the machine running the
+container:
+
 ```bash
 curl http://localhost:8090/api/health
 ```
-Deve retornar `{"ok":true}`. Se isso falhar, o problema é no container/porta,
-não no navegador.
 
-## Backup e persistência dos dados
+It should return `{"ok":true}`. If it fails, the problem is in the
+container/port setup, not the browser.
 
-O `docker-compose.yml` monta uma pasta local `./data` dentro do container,
-onde fica o arquivo `state.json` com todo o seu progresso. Esse arquivo:
+## Backup and data persistence
 
-- Sobrevive a `podman-compose down` / `up` e a rebuilds da imagem.
-- Pode ser copiado manualmente para backup:
+The `docker-compose.yml` file mounts a local `./data` folder into the
+container, where `state.json` stores all roadmap progress. That file:
+
+- Survives `podman-compose down` / `up` and image rebuilds.
+- Can be copied manually for backup:
+
   ```bash
   cp data/state.json data/state.backup-$(date +%Y%m%d).json
   ```
-- Também pode ser baixado a qualquer momento pela própria aplicação, na
-  seção **"Dados e backup"** (exporta um `.json` completo ou um `.md` legível).
 
-## Atualizando a aplicação
+- Can also be downloaded from the application itself in the Data and backup
+  section as either a full `.json` backup or a readable `.md` export.
 
-Se você (ou eu, numa próxima conversa) alterar o código do roadmap, dos
-flashcards, etc., basta reconstruir a imagem — o arquivo de estado em
-`./data` não é afetado:
+## Updating the application
+
+If you change the roadmap code, flashcards, or anything else later, just
+rebuild the image. The state file in `./data` is not affected:
 
 ```bash
 podman-compose up -d --build
 ```
 
-## Desenvolvimento local (sem Docker)
+## Local development (without Docker)
 
-Útil se você quiser mexer no código e ver o resultado rapidamente, com
-hot-reload do Vite.
+Useful if you want to change code and see the result quickly with Vite hot
+reload.
 
 Terminal 1 — backend:
+
 ```bash
 cd server
 npm install
 npm start
 ```
 
-Terminal 2 — frontend (com hot-reload, proxy automático para a API):
+Terminal 2 — frontend (with hot reload and automatic API proxy):
+
 ```bash
 cd client
 npm install
 npm run dev
 ```
 
-Acesse `http://localhost:5173` (o Vite dev server) — as chamadas a `/api`
-são redirecionadas automaticamente para o backend em `:8080` (ver
-`client/vite.config.js`).
+Open `http://localhost:5173` (the Vite dev server). Requests to `/api` are
+automatically proxied to the backend on `:8080` (see `client/vite.config.js`).
 
-## Segurança
+## Security
 
-Como combinado, esta versão **não tem autenticação** — ela assume que só
-dispositivos da sua rede local vão acessá-la. Se em algum momento você quiser:
+As discussed, this version has no authentication. It assumes only devices on
+your local network will access it. If you later want to:
 
-- **Acessar de fora de casa**: prefira usar sua VPN WireGuard já configurada
-  em vez de expor a porta 8080 diretamente na internet.
-- **Adicionar uma camada simples de proteção**: dá para colocar um proxy
-  reverso (Caddy ou Nginx) na frente exigindo autenticação básica (HTTP Basic
-  Auth), sem precisar mexer no código da aplicação.
+- Access it from outside your home network: prefer using your existing
+  WireGuard VPN instead of exposing port 8080 directly to the internet.
+- Add a simple protection layer: place a reverse proxy (Caddy or Nginx) in
+  front of it and require HTTP Basic Auth without changing the app code.
 
-## Estrutura de dados (para referência)
+## Data structure reference
 
-O `state.json` guarda um único objeto com:
+`state.json` stores a single object with:
 
-| Campo | Descrição |
+| Field | Description |
 |---|---|
-| `subtopics` | progresso e anotações por subtópico |
-| `topicNotes` / `quarterNotes` | anotações gerais |
-| `quarterDeadlines` | prazos por trimestre |
-| `studyTime` | segundos de estudo acumulados por trimestre |
-| `customTopics` | tópicos adicionados manualmente |
-| `myCourses` | cursos pessoais com status |
-| `customCards` / `cardEdits` / `removedCards` / `cardProgress` | flashcards e progresso de repetição espaçada |
-| `log` | histórico das últimas 30 atividades |
+| `subtopics` | progress and notes per subtopic |
+| `topicNotes` / `quarterNotes` | general notes |
+| `quarterDeadlines` | deadlines per quarter |
+| `studyTime` | accumulated study seconds per quarter |
+| `customTopics` | manually added topics |
+| `myCourses` | personal courses with status |
+| `customCards` / `cardEdits` / `removedCards` / `cardProgress` | flashcards and spaced repetition progress |
+| `log` | history of the latest 30 activities |
 
-Esse é o mesmo formato usado na versão anterior (HTML único), então um backup
-`.json` exportado de lá pode ser importado aqui pela seção "Dados e backup".
+This is the same format used by the previous single-HTML version, so a `.json`
+backup exported there can also be imported here through the Data and backup
+section.
