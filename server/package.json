@@ -1,0 +1,13 @@
+{
+  "name": "roadmap-tracker-server",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Backend do Roadmap Tracker — serve a API de estado e os arquivos estáticos do cliente.",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2"
+  }
+}

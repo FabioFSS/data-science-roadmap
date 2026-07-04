@@ -1,0 +1,26 @@
+export const FLASHCARDS_DEFAULT = [
+  { id:"fc-1", qid:"t1", q:"O que é o mecanismo de self-attention em um Transformer?", a:"Permite que cada token da sequência 'preste atenção' a outros tokens relevantes, ponderando sua influência no cálculo da representação final." },
+  { id:"fc-2", qid:"t1", q:"Qual a diferença entre um modelo decoder-only (estilo GPT) e um encoder-decoder?", a:"Decoder-only gera texto token a token usando só a parte decodificadora; encoder-decoder usa um bloco separado para entender a entrada antes de gerar a saída (comum em tradução)." },
+  { id:"fc-3", qid:"t1", q:"Por que Transformers substituíram RNNs em sequências longas?", a:"RNNs processam passo a passo e perdem contexto distante; Transformers acessam qualquer posição diretamente via atenção, em paralelo." },
+  { id:"fc-4", qid:"t1", q:"O que é overfitting e como a regularização ajuda?", a:"Overfitting é quando o modelo memoriza os dados de treino e generaliza mal; regularização (como dropout) penaliza complexidade excessiva." },
+  { id:"fc-5", qid:"t1", q:"Qual a vantagem de N-BEATS/TFT sobre ARIMA para forecast?", a:"Capturam padrões não-lineares e múltiplas séries simultaneamente, mas exigem mais dados e poder computacional." },
+  { id:"fc-6", qid:"t2", q:"O que é RAG e por que reduz alucinação?", a:"Retrieval-Augmented Generation busca informações externas relevantes antes de gerar a resposta, ancorando o modelo em fatos reais." },
+  { id:"fc-7", qid:"t2", q:"Qual a diferença entre LoRA e fine-tuning completo?", a:"LoRA ajusta um pequeno conjunto de parâmetros extras mantendo o modelo original congelado — muito mais barato que re-treinar todos os pesos." },
+  { id:"fc-8", qid:"t2", q:"O que é um embedding, em termos simples?", a:"Uma representação numérica (vetor) de um texto que captura seu significado, permitindo comparar similaridade matematicamente." },
+  { id:"fc-9", qid:"t2", q:"O que é chunking em RAG e por que importa?", a:"É a divisão de textos longos em pedaços menores antes de indexá-los; chunks mal dimensionados prejudicam a qualidade da busca." },
+  { id:"fc-10", qid:"t2", q:"Quando faz mais sentido usar um modelo aberto local em vez de API paga?", a:"Quando há restrições de privacidade/dados sensíveis, necessidade de customização profunda, ou volume que torna a API cara." },
+  { id:"fc-11", qid:"t3", q:"O que é 'LLM-as-judge'?", a:"Usar um LLM para avaliar automaticamente a qualidade da resposta de outro LLM, permitindo avaliação em escala." },
+  { id:"fc-12", qid:"t3", q:"Por que chain-of-thought melhora respostas em tarefas complexas?", a:"Induz o modelo a 'pensar' passo a passo antes da resposta final, reduzindo erros de raciocínio." },
+  { id:"fc-13", qid:"t3", q:"O que é prompt injection?", a:"Um ataque em que texto malicioso inserido na entrada tenta manipular ou sobrescrever as instruções originais do sistema." },
+  { id:"fc-14", qid:"t3", q:"Por que ter um dataset de avaliação fixo importa ao mudar um prompt?", a:"Permite detectar regressões objetivamente, comparando versões com os mesmos casos, em vez de confiar em impressão subjetiva." },
+  { id:"fc-15", qid:"t4", q:"O que é o padrão ReAct em agentes de IA?", a:"O modelo alterna entre 'raciocinar' sobre o que fazer e 'agir' usando ferramentas externas, repetindo o ciclo até resolver a tarefa." },
+  { id:"fc-16", qid:"t4", q:"Para que serve o Model Context Protocol (MCP)?", a:"Padronizar como agentes de IA se conectam a ferramentas e dados externos, evitando integrações proprietárias repetidas." },
+  { id:"fc-17", qid:"t4", q:"O que é prompt caching e por que reduz custo?", a:"Reaproveita partes fixas do prompt entre chamadas, evitando reprocessar e recobrar pelo mesmo conteúdo repetidamente." },
+  { id:"fc-18", qid:"t4", q:"Por que roteamento entre modelos por complexidade é útil em produção?", a:"Permite usar um modelo mais barato para tarefas simples e reservar um modelo maior só para casos que exigem mais capacidade." },
+  { id:"fc-19", qid:"t5", q:"O que é um model card?", a:"Documento que descreve capacidades, limitações, dados de treinamento e riscos conhecidos de um modelo de IA." },
+  { id:"fc-20", qid:"t5", q:"Por que quantização reduz custo de inferência?", a:"Reduz a precisão numérica dos pesos do modelo, diminuindo uso de memória e acelerando cálculos, com perda geralmente pequena de qualidade." },
+  { id:"fc-21", qid:"t5", q:"O que avalia o NIST AI Risk Management Framework?", a:"Fornece um processo estruturado para identificar, medir e mitigar riscos de sistemas de IA ao longo do ciclo de vida." },
+  { id:"fc-22", qid:"t6", q:"Por que comunicação técnica para stakeholders não técnicos é uma habilidade sênior?", a:"Decisões de negócio dependem de que a área técnica traduza métricas e riscos sem depender de jargão." },
+  { id:"fc-23", qid:"t6", q:"O que caracteriza um bom design doc de sistema de IA em produção?", a:"Explicita arquitetura, decisões e trade-offs considerados — não só o resultado final." }
+];
+export const BOX_INTERVALS = [0, 1, 3, 7, 14, 30, 60];

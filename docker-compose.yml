@@ -1,0 +1,21 @@
+services:
+  roadmap-tracker:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: roadmap-tracker:latest
+    container_name: roadmap-tracker
+    restart: unless-stopped
+    ports:
+      # A porta da ESQUERDA é a que você acessa no navegador; a da DIREITA
+      # (8080) é fixa dentro do container, não precisa mexer nela.
+      # Se a porta da esquerda já estiver em uso na sua máquina, troque só
+      # esse número (ex: "8090:8080") e rode `podman-compose up -d --build`
+      # de novo.
+      - "8090:8080"
+    volumes:
+      # O sufixo ":Z" é necessário no Fedora/Bazzite (SELinux enforcing) para
+      # que o container tenha permissão de escrita nesta pasta do host.
+      # Sem ele, leituras funcionam mas gravações falham silenciosamente
+      # com "permission denied" nos logs do container.
+      - ./data:/app/server/data:Z
