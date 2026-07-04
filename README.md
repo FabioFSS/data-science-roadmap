@@ -1,5 +1,7 @@
 # Roadmap Tracker — IA/LLMs para Cientista de Dados Sênior
 
+[English version](README.en.md)
+
 Aplicação self-hosted para acompanhar o roadmap de estudos: progresso por
 tópico/subtópico, prazos, tempo de estudo, certificações, flashcards com
 repetição espaçada, cursos pessoais, estatísticas e backup.
