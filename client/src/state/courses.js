@@ -20,6 +20,8 @@ export function addMyCourse(data) {
     url: data.url.trim(),
     status: "planejado",
     notes: "",
+    content: "",
+    images: [],
   });
   persist(true);
 }
@@ -47,5 +49,32 @@ export function updateMyCourseNote(id, value) {
 export function removeMyCourse(id) {
   const state = getState();
   state.myCourses = state.myCourses.filter((c) => c.id !== id);
+  persist(true);
+}
+
+export function getMyCourse(id) {
+  return getState().myCourses.find((c) => c.id === id) || null;
+}
+
+export function updateMyCourseContent(id, value) {
+  const c = getMyCourse(id);
+  if (c) {
+    c.content = value;
+    persist(true);
+  }
+}
+
+export function addMyCourseImage(id, image) {
+  const c = getMyCourse(id);
+  if (!c) return;
+  if (!c.images) c.images = [];
+  c.images.push(image);
+  persist(true);
+}
+
+export function removeMyCourseImage(id, filename) {
+  const c = getMyCourse(id);
+  if (!c || !c.images) return;
+  c.images = c.images.filter((img) => img.filename !== filename);
   persist(true);
 }

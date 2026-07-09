@@ -18,3 +18,20 @@ export async function apiSetState(state) {
   if (!res.ok) throw new Error(`Falha ao salvar estado (HTTP ${res.status})`);
   return await res.json();
 }
+
+export async function apiUploadImage({ courseId, dataUrl }) {
+  const res = await fetch("/api/uploads", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ courseId, dataUrl }),
+  });
+  const body = await res.json();
+  if (!res.ok) throw new Error(body.error || `Falha ao enviar imagem (HTTP ${res.status})`);
+  return body;
+}
+
+export async function apiDeleteImage(filename) {
+  const res = await fetch(`/api/uploads/${encodeURIComponent(filename)}`, { method: "DELETE" });
+  if (!res.ok) throw new Error(`Falha ao remover imagem (HTTP ${res.status})`);
+  return await res.json();
+}

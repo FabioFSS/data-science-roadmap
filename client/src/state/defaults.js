@@ -5,7 +5,7 @@ export const DEFAULT_STATE = {
   quarterDeadlines: {}, // qid -> "YYYY-MM-DD"
   studyTime: {}, // qid -> segundos acumulados
   customTopics: {}, // qid -> [{ title }]
-  myCourses: [], // [{ id, name, provider, url, status, notes }]
+  myCourses: [], // [{ id, name, provider, url, status, notes, content, images: [{filename,url,name}] }]
   customCards: [], // [{ id, qid, q, a }]
   cardEdits: {}, // id (cartao padrao) -> { q, a }
   removedCards: [], // ids de cartoes padrao removidos

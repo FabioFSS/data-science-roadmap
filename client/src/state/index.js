@@ -49,4 +49,8 @@ export {
   cycleMyCourseStatus,
   updateMyCourseNote,
   removeMyCourse,
+  getMyCourse,
+  updateMyCourseContent,
+  addMyCourseImage,
+  removeMyCourseImage,
 } from "./courses.js";

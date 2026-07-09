@@ -74,6 +74,7 @@ export function renderCertifications() {
               <button class="status-pill ${c.status}" data-course-status="${c.id}">${MY_COURSE_STATUS_LABEL[c.status]}</button>
             </div>
             <div class="my-course-foot">
+              <button class="btn course-page-link" data-course-open="${c.id}">📝 Página do curso${c.content ? " ●" : ""}</button>
               <span class="note-toggle ${c.notes ? "has-note" : ""}" data-course-notetoggle="${c.id}">Anotação ${c.notes ? "●" : ""}</span>
               <button class="remove-link" data-course-remove="${c.id}">remover</button>
             </div>
@@ -109,6 +110,14 @@ export function renderCertifications() {
     if (e.key === "Enter") submitNewCourse();
   });
 
+  main.querySelectorAll("[data-course-open]").forEach((btn) =>
+    btn.addEventListener("click", () => {
+      ui.view = "course";
+      ui.activeCourseId = btn.getAttribute("data-course-open");
+      render();
+      window.scrollTo(0, 0);
+    })
+  );
   main.querySelectorAll("[data-course-status]").forEach((btn) =>
     btn.addEventListener("click", () => {
       cycleMyCourseStatus(btn.getAttribute("data-course-status"));

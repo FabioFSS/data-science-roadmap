@@ -5,7 +5,7 @@
 import { DATA } from "./data/quarters.js";
 
 export const ui = {
-  view: "quarter", // "quarter" | "cert" | "flashcards" | "glossary" | "stats" | "data"
+  view: "quarter", // "quarter" | "cert" | "flashcards" | "glossary" | "stats" | "data" | "course"
   activeQuarter: DATA[0].id,
   expanded: {}, // tkey -> bool, controla quais tópicos estão abertos
   certFilter: "all",
@@ -18,4 +18,6 @@ export const ui = {
   flashCramMode: false,
   flashManageQuery: "",
   flashEditingId: null,
+  activeCourseId: null,
+  courseMode: "edit", // "edit" | "preview"
 };

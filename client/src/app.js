@@ -6,10 +6,12 @@ import { renderFlashcardsPage } from "./views/flashcardsView.js";
 import { renderGlossary } from "./views/glossaryView.js";
 import { renderStats } from "./views/statsView.js";
 import { renderDataPage } from "./views/dataView.js";
+import { renderCoursePage } from "./views/courseView.js";
 
 export function render() {
   renderSidebar();
   if (ui.view === "cert") renderCertifications();
+  else if (ui.view === "course") renderCoursePage();
   else if (ui.view === "flashcards") renderFlashcardsPage();
   else if (ui.view === "glossary") renderGlossary();
   else if (ui.view === "stats") renderStats();
